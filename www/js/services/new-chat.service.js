@@ -14,38 +14,44 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ChatsCtrl = function (_Controller) {
-  _inherits(ChatsCtrl, _Controller);
+var NewChat = function (_Service) {
+  _inherits(NewChat, _Service);
 
-  function ChatsCtrl() {
-    _classCallCheck(this, ChatsCtrl);
+  function NewChat() {
+    _classCallCheck(this, NewChat);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ChatsCtrl).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NewChat).apply(this, arguments));
 
-    _this.helpers({
-      data: function data() {
-        return Chats.find();
-      }
-    });
+    _this.templateUrl = 'client/templates/new-chat.html';
     return _this;
   }
 
-  _createClass(ChatsCtrl, [{
-    key: 'showNewChatModal',
-    value: function showNewChatModal() {
-      this.NewChat.showModal();
+  _createClass(NewChat, [{
+    key: 'showModal',
+    value: function showModal() {
+      var _this2 = this;
+
+      this.scope = this.$rootScope.$new();
+
+      this.$ionicModal.fromTemplateUrl(this.templateUrl, {
+        scope: this.scope
+      }).then(function (modal) {
+        _this2.modal = modal;
+        _this2.modal.show();
+      });
     }
   }, {
-    key: 'remove',
-    value: function remove(chat) {
-      this.callMethod('removeChat', chat._id);
+    key: 'hideModal',
+    value: function hideModal() {
+      this.scope.$destroy();
+      this.modal.remove();
     }
   }]);
 
-  return ChatsCtrl;
-}(_entities.Controller);
+  return NewChat;
+}(_entities.Service);
 
-exports.default = ChatsCtrl;
+exports.default = NewChat;
 
 
-ChatsCtrl.$inject = ['$scope', 'NewChat'];
+NewChat.$inject = ['$rootScope', '$ionicModal'];
