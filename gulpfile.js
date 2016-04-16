@@ -1,26 +1,33 @@
-var babel = require('gulp-babel');
 var bower = require('bower');
-var concat = require('gulp-concat');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var minifyCss = require('gulp-minify-css');
-var plumber = require('gulp-plumber');
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var sh = require('shelljs');
+var webpack = require('webpack');
+
+var webpackConfig = require('./webpack.config.js');
 
 var paths = {
-  es6: ['./src/**/*.js'],
+  webpack: ['./src/**/*.js'],
   sass: ['./scss/**/*.scss']
 };
 
-gulp.task('default', ['babel', 'sass']);
+gulp.task('default', ['webpack', 'sass']);
 
-gulp.task('babel', function () {
-  return gulp.src(paths.es6)
-    .pipe(plumber())
-    .pipe(babel({presets: ['es2015']}))
-    .pipe(gulp.dest('www/js'));
+gulp.task('webpack', function(done) {
+  webpack(webpackConfig, function(err, stats) {
+    if (err) {
+      throw new gutil.PluginError('webpack', err);
+    }
+
+    gutil.log('[webpack]', stats.toString({
+      colors: true
+    }));
+
+    done();
+  });
 });
 
 gulp.task('sass', function(done) {
@@ -38,7 +45,7 @@ gulp.task('sass', function(done) {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.es6, ['babel']);
+  gulp.watch(paths.webpack, ['webpack']);
   gulp.watch(paths.sass, ['sass']);
 });
 
