@@ -1,7 +1,10 @@
 var path = require('path');
 
 module.exports = {
-  entry: './src/app.js',
+  entry: [
+    './server/common.js',
+    './src/app.js'
+  ],
   output: {
     path: path.join(__dirname, './www/js'),
     filename: 'bundle.js'
@@ -19,6 +22,9 @@ module.exports = {
     }]
   },
   resolve: {
-    extensions: ['', '.js']
+    extensions: ['', '.js'],
+    alias: {
+      server: path.join(__dirname, 'server')
+    }
   }
 };

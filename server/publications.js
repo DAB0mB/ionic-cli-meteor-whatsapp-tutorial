@@ -1,30 +1,30 @@
-if (Meteor.isServer) {
-  Meteor.publish('users', function () {
-    return Meteor.users.find({}, { fields: { profile: 1 } });
-  });
+import { Chats, Messages } from './collections';
 
-  Meteor.publishComposite('chats', function () {
-    if (! this.userId) {
-      return;
-    }
+Meteor.publish('users', function() {
+  return Meteor.users.find({}, { fields: { profile: 1 } });
+});
 
-    return {
-      find: function () {
-        return Chats.find({ userIds: this.userId });
-      },
-      children: [
-        {
-          find: function (chat) {
-            return Messages.find({ chatId: chat._id });
-          }
-        },
-        {
-          find: function (chat) {
-            var fields = { profile: 1 };
-            return Meteor.users.find({ _id: { $in: chat.userIds } }, { fields: fields });
-          }
+Meteor.publishComposite('chats', function() {
+  if (!this.userId) return;
+
+  return {
+    find() {
+      return Chats.find({ userIds: this.userId });
+    },
+    children: [
+      {
+        find(chat) {
+          return Messages.find({ chatId: chat._id });
         }
-      ]
-    }
-  });
-}
+      },
+      {
+        find(chat) {
+          const query = { _id: { $in: chat.userIds } };
+          const options = { fields: { profile: 1 } };
+
+          return Meteor.users.find(query, options);
+        }
+      }
+    ]
+  };
+});

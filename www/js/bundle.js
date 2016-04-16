@@ -44,61 +44,185 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	__webpack_require__(1);
+	module.exports = __webpack_require__(4);
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
-	var _definer = __webpack_require__(1);
+	__webpack_require__(2);
+	
+	__webpack_require__(3);
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var Chats = exports.Chats = new Mongo.Collection('chats');
+	var Messages = exports.Messages = new Mongo.Collection('messages');
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _collections = __webpack_require__(2);
+	
+	Meteor.methods({
+	  newMessage: function newMessage(message) {
+	    if (!this.userId) {
+	      throw new Meteor.Error('not-logged-in', 'Must be logged in to send message.');
+	    }
+	
+	    check(message, Match.OneOf({
+	      text: String,
+	      type: String,
+	      chatId: String
+	    }, {
+	      picture: String,
+	      type: String,
+	      chatId: String
+	    }));
+	
+	    message.timestamp = new Date();
+	    message.userId = this.userId;
+	
+	    var messageId = _collections.Messages.insert(message);
+	    _collections.Chats.update(message.chatId, { $set: { lastMessage: message } });
+	
+	    return messageId;
+	  },
+	  updateName: function updateName(name) {
+	    if (!this.userId) {
+	      throw new Meteor.Error('not-logged-in', 'Must be logged in to update his name.');
+	    }
+	
+	    check(name, String);
+	
+	    if (name.length === 0) {
+	      throw Meteor.Error('name-required', 'Must provide a user name');
+	    }
+	
+	    return Meteor.users.update(this.userId, { $set: { 'profile.name': name } });
+	  },
+	  newChat: function newChat(otherId) {
+	    if (!this.userId) {
+	      throw new Meteor.Error('not-logged-in', 'Must be logged to create a chat.');
+	    }
+	
+	    check(otherId, String);
+	    var otherUser = Meteor.users.findOne(otherId);
+	
+	    if (!otherUser) {
+	      throw new Meteor.Error('user-not-exists', 'Chat\'s user not exists');
+	    }
+	
+	    var chat = {
+	      userIds: [this.userId, otherId],
+	      createdAt: new Date()
+	    };
+	
+	    var chatId = _collections.Chats.insert(chat);
+	
+	    return chatId;
+	  },
+	  removeChat: function removeChat(chatId) {
+	    if (!this.userId) {
+	      throw new Meteor.Error('not-logged-in', 'Must be logged to create a chat.');
+	    }
+	
+	    check(chatId, String);
+	
+	    var chat = _collections.Chats.findOne(chatId);
+	
+	    if (!chat || !_.include(chat.userIds, this.userId)) {
+	      throw new Meteor.Error('chat-not-exists', 'Chat not exists');
+	    }
+	
+	    _collections.Messages.remove({ chatId: chatId });
+	
+	    return _collections.Chats.remove({ _id: chatId });
+	  },
+	  updatePicture: function updatePicture(data) {
+	    if (!this.userId) {
+	      throw new Meteor.Error('not-logged-in', 'Must be logged in to update his picture.');
+	    }
+	
+	    check(data, String);
+	
+	    return Meteor.users.update(this.userId, { $set: { 'profile.picture': data } });
+	  }
+	});
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _definer = __webpack_require__(5);
 	
 	var _definer2 = _interopRequireDefault(_definer);
 	
-	var _chats = __webpack_require__(3);
+	var _chats = __webpack_require__(7);
 	
 	var _chats2 = _interopRequireDefault(_chats);
 	
-	var _chat = __webpack_require__(4);
+	var _chat = __webpack_require__(8);
 	
 	var _chat2 = _interopRequireDefault(_chat);
 	
-	var _confirmation = __webpack_require__(5);
+	var _confirmation = __webpack_require__(9);
 	
 	var _confirmation2 = _interopRequireDefault(_confirmation);
 	
-	var _login = __webpack_require__(6);
+	var _login = __webpack_require__(10);
 	
 	var _login2 = _interopRequireDefault(_login);
 	
-	var _newChat = __webpack_require__(7);
+	var _newChat = __webpack_require__(11);
 	
 	var _newChat2 = _interopRequireDefault(_newChat);
 	
-	var _profile = __webpack_require__(8);
+	var _profile = __webpack_require__(12);
 	
 	var _profile2 = _interopRequireDefault(_profile);
 	
-	var _settings = __webpack_require__(9);
+	var _settings = __webpack_require__(13);
 	
 	var _settings2 = _interopRequireDefault(_settings);
 	
-	var _input = __webpack_require__(10);
+	var _input = __webpack_require__(14);
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	var _calendar = __webpack_require__(11);
+	var _calendar = __webpack_require__(15);
 	
 	var _calendar2 = _interopRequireDefault(_calendar);
 	
-	var _chatName = __webpack_require__(12);
+	var _chatName = __webpack_require__(16);
 	
 	var _chatName2 = _interopRequireDefault(_chatName);
 	
-	var _chatPicture = __webpack_require__(13);
+	var _chatPicture = __webpack_require__(17);
 	
 	var _chatPicture2 = _interopRequireDefault(_chatPicture);
 	
-	var _newChat3 = __webpack_require__(14);
+	var _newChat3 = __webpack_require__(18);
 	
 	var _newChat4 = _interopRequireDefault(_newChat3);
 	
-	var _routes = __webpack_require__(15);
+	var _routes = __webpack_require__(19);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -120,7 +244,7 @@
 	}
 
 /***/ },
-/* 1 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -131,7 +255,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _entities = __webpack_require__(6);
 	
 	var Entities = _interopRequireWildcard(_entities);
 	
@@ -259,7 +383,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 2 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -445,7 +569,7 @@
 	}(Injectable);
 
 /***/ },
-/* 3 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -456,7 +580,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -502,7 +626,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 4 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -513,7 +637,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _collections = __webpack_require__(2);
+	
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -535,10 +661,10 @@
 	
 	    _this.helpers({
 	      messages: function messages() {
-	        return Messages.find({ chatId: this.chatId });
+	        return _collections.Messages.find({ chatId: this.chatId });
 	      },
 	      data: function data() {
-	        return Chats.findOne(this.chatId);
+	        return _collections.Chats.findOne(this.chatId);
 	      }
 	    });
 	
@@ -642,7 +768,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 5 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -653,7 +779,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -708,7 +834,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 6 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -719,7 +845,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -790,7 +916,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 7 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -801,7 +927,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _collections = __webpack_require__(2);
+	
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -832,7 +960,7 @@
 	    value: function newChat(userId) {
 	      var _this2 = this;
 	
-	      var chat = Chats.findOne({ userIds: { $all: [this.currentUserId, userId] } });
+	      var chat = _collections.Chats.findOne({ userIds: { $all: [this.currentUserId, userId] } });
 	
 	      if (chat) {
 	        this.hideNewChatModal();
@@ -878,7 +1006,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 8 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -889,7 +1017,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -964,7 +1092,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 9 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -975,7 +1103,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1025,7 +1153,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 10 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1036,7 +1164,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1110,7 +1238,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 11 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1121,7 +1249,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1159,7 +1287,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 12 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1170,7 +1298,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1207,7 +1335,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 13 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1218,7 +1346,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1255,7 +1383,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 14 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1266,7 +1394,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1318,7 +1446,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 15 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1330,7 +1458,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(2);
+	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	

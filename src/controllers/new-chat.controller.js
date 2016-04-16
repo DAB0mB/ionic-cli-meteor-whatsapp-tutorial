@@ -1,3 +1,4 @@
+import { Chats } from 'server/collections';
 import { Controller } from '../entities';
 
 export default class NewChatCtrl extends Controller {

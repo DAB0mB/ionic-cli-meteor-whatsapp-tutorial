@@ -10,7 +10,8 @@ var webpack = require('webpack');
 var webpackConfig = require('./webpack.config.js');
 
 var paths = {
-  webpack: ['./src/**/*.js'],
+  clientjs: ['./src/**/*.js'],
+  serverjs: ['./server/**/*.js'],
   sass: ['./scss/**/*.scss']
 };
 
@@ -45,7 +46,8 @@ gulp.task('sass', function(done) {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.webpack, ['webpack']);
+  gulp.watch(paths.clientjs, ['webpack']);
+  gulp.watch(paths.serverjs, ['webpack']);
   gulp.watch(paths.sass, ['sass']);
 });
 
