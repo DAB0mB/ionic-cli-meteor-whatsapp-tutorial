@@ -21,18 +21,6 @@ export default class ChatCtrl extends Controller {
     this.autoScroll();
   }
 
-  sendPicture() {
-    MeteorCameraUI.getPicture({}, (err, data) => {
-      if (err) return this.handleError(err);
-
-      this.callMethod('newMessage', {
-        picture: data,
-        type: 'picture',
-        chatId: this.chatId
-      });
-    });
-  }
-
   sendMessage() {
     if (_.isEmpty(this.message)) return;
 

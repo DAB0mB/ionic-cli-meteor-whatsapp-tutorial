@@ -1,4 +1,3 @@
-// Modules
 import Definer from './definer';
 import ChatsCtrl from './controllers/chats.controller';
 import ChatCtrl from './controllers/chat.controller';
@@ -14,8 +13,7 @@ import ChatPictureFilter from './filters/chat-picture.filter';
 import NewChatService from './services/new-chat.service';
 import { RoutesConfig, RoutesRunner } from './routes';
 
-// App
-const App = angular.module('Whatsapp', [
+export const App = angular.module('Whatsapp', [
   'angular-meteor',
   'angular-meteor.auth',
   'angularMoment',
@@ -38,14 +36,16 @@ new Definer(App)
   .define(RoutesConfig)
   .define(RoutesRunner);
 
-// Startup
-if (Meteor.isCordova) {
-  angular.element(document).on('deviceready', onReady);
-}
-else {
-  angular.element(document).ready(onReady);
-}
+ionic.Platform.ready(() => {
+  const Keyboard = Meteor.isCordova && cordova.plugins && cordova.plugins.Keyboard;
 
-function onReady() {
+  if (Keyboard) {
+    Keyboard.hideKeyboardAccessoryBar(true);
+    Keyboard.disableScroll(true);
+  }
+  if (window.StatusBar) {
+    StatusBar.styleLightContent();
+  }
+
   angular.bootstrap(document, ['Whatsapp']);
-}
+});

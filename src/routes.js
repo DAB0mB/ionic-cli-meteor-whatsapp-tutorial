@@ -12,7 +12,7 @@ export class RoutesConfig extends Config {
       .state('tab', {
         url: '/tab',
         abstract: true,
-        templateUrl: 'client/templates/tabs.html',
+        templateUrl: 'templates/tabs.html',
         resolve: {
           user: this.isAuthorized,
           chats() {
@@ -24,7 +24,7 @@ export class RoutesConfig extends Config {
         url: '/chats',
         views: {
           'tab-chats': {
-            templateUrl: 'client/templates/chats.html',
+            templateUrl: 'templates/chats.html',
             controller: 'ChatsCtrl as chats'
           }
         }
@@ -33,24 +33,24 @@ export class RoutesConfig extends Config {
         url: '/chats/:chatId',
         views: {
           'tab-chats': {
-            templateUrl: 'client/templates/chat.html',
+            templateUrl: 'templates/chat.html',
             controller: 'ChatCtrl as chat'
           }
         }
       })
       .state('login', {
         url: '/login',
-        templateUrl: 'client/templates/login.html',
+        templateUrl: 'templates/login.html',
         controller: 'LoginCtrl as logger'
       })
       .state('confirmation', {
         url: '/confirmation/:phone',
-        templateUrl: 'client/templates/confirmation.html',
+        templateUrl: 'templates/confirmation.html',
         controller: 'ConfirmationCtrl as confirmation'
       })
       .state('profile', {
         url: '/profile',
-        templateUrl: 'client/templates/profile.html',
+        templateUrl: 'templates/profile.html',
         controller: 'ProfileCtrl as profile',
         resolve: {
           user: this.isAuthorized
@@ -60,7 +60,7 @@ export class RoutesConfig extends Config {
         url: '/settings',
         views: {
           'tab-settings': {
-            templateUrl: 'client/templates/settings.html',
+            templateUrl: 'templates/settings.html',
             controller: 'SettingsCtrl as settings',
           }
         }

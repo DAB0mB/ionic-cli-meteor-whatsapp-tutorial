@@ -8,21 +8,6 @@ export default class ProfileCtrl extends Controller {
     this.name = profile ? profile.name : '';
   }
 
-  updatePicture () {
-    MeteorCameraUI.getPicture({ width: 60, height: 60 }, (err, data) => {
-      if (err) return this.handleError(err);
-
-      this.$ionicLoading.show({
-        template: 'Updating picture...'
-      });
-
-      this.callMethod('updatePicture', data, (err) => {
-        this.$ionicLoading.hide();
-        this.handleError(err);
-      });
-    });
-  }
-
   updateName() {
     if (_.isEmpty(this.name)) return;
 

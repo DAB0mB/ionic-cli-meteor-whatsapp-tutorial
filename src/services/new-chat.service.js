@@ -4,7 +4,7 @@ export default class NewChat extends Service {
   constructor() {
     super(...arguments);
 
-    this.templateUrl = 'client/templates/new-chat.html';
+    this.templateUrl = 'templates/new-chat.html';
   }
 
   showModal() {

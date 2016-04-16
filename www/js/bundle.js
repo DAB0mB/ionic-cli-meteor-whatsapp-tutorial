@@ -170,6 +170,11 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.App = undefined;
+	
 	var _definer = __webpack_require__(5);
 	
 	var _definer2 = _interopRequireDefault(_definer);
@@ -226,22 +231,23 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// App
-	// Modules
-	var App = angular.module('Whatsapp', ['angular-meteor', 'angular-meteor.auth', 'angularMoment', 'ionic']);
+	var App = exports.App = angular.module('Whatsapp', ['angular-meteor', 'angular-meteor.auth', 'angularMoment', 'ionic']);
 	
 	new _definer2.default(App).define(_chats2.default).define(_chat2.default).define(_confirmation2.default).define(_login2.default).define(_newChat2.default).define(_profile2.default).define(_settings2.default).define(_input2.default).define(_calendar2.default).define(_chatName2.default).define(_chatPicture2.default).define(_newChat4.default).define(_routes.RoutesConfig).define(_routes.RoutesRunner);
 	
-	// Startup
-	if (Meteor.isCordova) {
-	  angular.element(document).on('deviceready', onReady);
-	} else {
-	  angular.element(document).ready(onReady);
-	}
+	ionic.Platform.ready(function () {
+	  var Keyboard = Meteor.isCordova && cordova.plugins && cordova.plugins.Keyboard;
 	
-	function onReady() {
+	  if (Keyboard) {
+	    Keyboard.hideKeyboardAccessoryBar(true);
+	    Keyboard.disableScroll(true);
+	  }
+	  if (window.StatusBar) {
+	    StatusBar.styleLightContent();
+	  }
+	
 	  angular.bootstrap(document, ['Whatsapp']);
-	}
+	});
 
 /***/ },
 /* 5 */
@@ -580,6 +586,8 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
+	var _collections = __webpack_require__(2);
+	
 	var _entities = __webpack_require__(6);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -598,7 +606,7 @@
 	
 	    _this.helpers({
 	      data: function data() {
-	        return Chats.find();
+	        return _collections.Chats.find();
 	      }
 	    });
 	    return _this;
@@ -673,21 +681,6 @@
 	  }
 	
 	  _createClass(ChatCtrl, [{
-	    key: 'sendPicture',
-	    value: function sendPicture() {
-	      var _this2 = this;
-	
-	      MeteorCameraUI.getPicture({}, function (err, data) {
-	        if (err) return _this2.handleError(err);
-	
-	        _this2.callMethod('newMessage', {
-	          picture: data,
-	          type: 'picture',
-	          chatId: _this2.chatId
-	        });
-	      });
-	    }
-	  }, {
 	    key: 'sendMessage',
 	    value: function sendMessage() {
 	      if (_.isEmpty(this.message)) return;
@@ -703,14 +696,14 @@
 	  }, {
 	    key: 'inputUp',
 	    value: function inputUp() {
-	      var _this3 = this;
+	      var _this2 = this;
 	
 	      if (this.isIOS) {
 	        this.keyboardHeight = 216;
 	      }
 	
 	      this.$timeout(function () {
-	        _this3.$ionicScrollDelegate.$getByHandle('chatScroll').scrollBottom(true);
+	        _this2.$ionicScrollDelegate.$getByHandle('chatScroll').scrollBottom(true);
 	      }, 300);
 	    }
 	  }, {
@@ -732,16 +725,16 @@
 	  }, {
 	    key: 'autoScroll',
 	    value: function autoScroll() {
-	      var _this4 = this;
+	      var _this3 = this;
 	
 	      var recentMessagesNum = this.messages.length;
 	
 	      this.autorun(function () {
-	        var currMessagesNum = _this4.getCollectionReactively('messages').length;
+	        var currMessagesNum = _this3.getCollectionReactively('messages').length;
 	        var animate = recentMessagesNum != currMessagesNum;
 	        recentMessagesNum = currMessagesNum;
 	
-	        _this4.$ionicScrollDelegate.$getByHandle('chatScroll').scrollBottom(animate);
+	        _this3.$ionicScrollDelegate.$getByHandle('chatScroll').scrollBottom(animate);
 	      });
 	    }
 	  }, {
@@ -1039,33 +1032,15 @@
 	  }
 	
 	  _createClass(ProfileCtrl, [{
-	    key: 'updatePicture',
-	    value: function updatePicture() {
-	      var _this2 = this;
-	
-	      MeteorCameraUI.getPicture({ width: 60, height: 60 }, function (err, data) {
-	        if (err) return _this2.handleError(err);
-	
-	        _this2.$ionicLoading.show({
-	          template: 'Updating picture...'
-	        });
-	
-	        _this2.callMethod('updatePicture', data, function (err) {
-	          _this2.$ionicLoading.hide();
-	          _this2.handleError(err);
-	        });
-	      });
-	    }
-	  }, {
 	    key: 'updateName',
 	    value: function updateName() {
-	      var _this3 = this;
+	      var _this2 = this;
 	
 	      if (_.isEmpty(this.name)) return;
 	
 	      this.callMethod('updateName', this.name, function (err) {
-	        if (err) return _this3.handleError(err);
-	        _this3.$state.go('tab.chats');
+	        if (err) return _this2.handleError(err);
+	        _this2.$state.go('tab.chats');
 	      });
 	    }
 	  }, {
@@ -1372,7 +1347,7 @@
 	      var otherUser = Meteor.users.findOne(otherId);
 	      var hasPicture = otherUser && otherUser.profile && otherUser.profile.picture;
 	
-	      return hasPicture ? otherUser.profile.picture : chat.picture || '/user-default.svg';
+	      return hasPicture ? otherUser.profile.picture : chat.picture || '/img/user-default.svg';
 	    }
 	  }]);
 	
@@ -1410,7 +1385,7 @@
 	
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NewChat).apply(this, arguments));
 	
-	    _this.templateUrl = 'client/templates/new-chat.html';
+	    _this.templateUrl = 'templates/new-chat.html';
 	    return _this;
 	  }
 	
@@ -1484,7 +1459,7 @@
 	      this.$stateProvider.state('tab', {
 	        url: '/tab',
 	        abstract: true,
-	        templateUrl: 'client/templates/tabs.html',
+	        templateUrl: 'templates/tabs.html',
 	        resolve: {
 	          user: this.isAuthorized,
 	          chats: function chats() {
@@ -1495,7 +1470,7 @@
 	        url: '/chats',
 	        views: {
 	          'tab-chats': {
-	            templateUrl: 'client/templates/chats.html',
+	            templateUrl: 'templates/chats.html',
 	            controller: 'ChatsCtrl as chats'
 	          }
 	        }
@@ -1503,21 +1478,21 @@
 	        url: '/chats/:chatId',
 	        views: {
 	          'tab-chats': {
-	            templateUrl: 'client/templates/chat.html',
+	            templateUrl: 'templates/chat.html',
 	            controller: 'ChatCtrl as chat'
 	          }
 	        }
 	      }).state('login', {
 	        url: '/login',
-	        templateUrl: 'client/templates/login.html',
+	        templateUrl: 'templates/login.html',
 	        controller: 'LoginCtrl as logger'
 	      }).state('confirmation', {
 	        url: '/confirmation/:phone',
-	        templateUrl: 'client/templates/confirmation.html',
+	        templateUrl: 'templates/confirmation.html',
 	        controller: 'ConfirmationCtrl as confirmation'
 	      }).state('profile', {
 	        url: '/profile',
-	        templateUrl: 'client/templates/profile.html',
+	        templateUrl: 'templates/profile.html',
 	        controller: 'ProfileCtrl as profile',
 	        resolve: {
 	          user: this.isAuthorized
@@ -1526,7 +1501,7 @@
 	        url: '/settings',
 	        views: {
 	          'tab-settings': {
-	            templateUrl: 'client/templates/settings.html',
+	            templateUrl: 'templates/settings.html',
 	            controller: 'SettingsCtrl as settings'
 	          }
 	        }
