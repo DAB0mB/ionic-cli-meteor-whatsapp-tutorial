@@ -1,4 +1,11 @@
+var camelCase = require('lodash.camelcase');
+var upperFirst = require('lodash.upperfirst');
 var path = require('path');
+
+var patterns = {
+  meteorPack: /^meteor\/(.+)$/,
+  cordovaPack: /^cordova\/(.+)$/
+};
 
 module.exports = {
   entry: [
@@ -7,8 +14,18 @@ module.exports = {
   ],
   output: {
     path: path.join(__dirname, './www/js'),
-    filename: 'bundle.js'
+    filename: 'app.bundle.js'
   },
+  externals: [
+    {
+      meteor: 'Meteor',
+      angular: true,
+      cordova: true,
+      ionic: true,
+      moment: true
+    },
+    customExternals
+  ],
   target: 'web',
   devtool: 'source-map',
   babel: {
@@ -28,3 +45,21 @@ module.exports = {
     }
   }
 };
+
+function customExternals(context, request, callback) {
+  var meteorPackMatch = request.match(patterns.meteorPack);
+
+  if (meteorPackMatch) {
+    var packName = meteorPackMatch[1];
+    return callback(null, 'Package["' + packName + '"]');
+  }
+
+  var cordovaPackMatch = request.match(patterns.cordovaPack);
+
+  if (cordovaPackMatch) {
+    var packName = upperFirst(camelCase(cordovaPackMatch[1]));
+    return callback(null, 'this.cordova && cordova.plugins && cordova.plugins.' + packName);
+  }
+
+  callback();
+}

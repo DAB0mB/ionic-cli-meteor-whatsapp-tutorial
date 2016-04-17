@@ -1,3 +1,5 @@
+import angular from 'angular';
+import { _ } from 'meteor/underscore';
 import * as Entities from './entities';
 
 export default class Definer {

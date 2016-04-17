@@ -1,3 +1,4 @@
+import meteor from 'meteor';
 import { Chats } from 'server/collections';
 import { Controller } from '../entities';
 
@@ -9,7 +10,7 @@ export default class NewChatCtrl extends Controller {
 
     this.helpers({
       users() {
-        return Meteor.users.find({ _id: { $ne: this.currentUserId } });
+        return meteor.users.find({ _id: { $ne: this.currentUserId } });
       }
     });
   }

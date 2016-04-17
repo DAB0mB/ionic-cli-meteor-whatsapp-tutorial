@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Filter } from '../entities';
 
 export default class calendar extends Filter {

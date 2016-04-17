@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	module.exports = __webpack_require__(4);
+	module.exports = __webpack_require__(8);
 
 
 /***/ },
@@ -56,35 +56,55 @@
 	
 	__webpack_require__(2);
 	
-	__webpack_require__(3);
+	__webpack_require__(4);
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var Chats = exports.Chats = new Mongo.Collection('chats');
-	var Messages = exports.Messages = new Mongo.Collection('messages');
+	exports.Messages = exports.Chats = undefined;
+	
+	var _mongo = __webpack_require__(3);
+	
+	var Chats = exports.Chats = new _mongo.Mongo.Collection('chats');
+	var Messages = exports.Messages = new _mongo.Mongo.Collection('messages');
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+	module.exports = Package["mongo"];
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
+	var _meteor = __webpack_require__(5);
+	
+	var _meteor2 = _interopRequireDefault(_meteor);
+	
+	var _underscore = __webpack_require__(6);
+	
+	var _check = __webpack_require__(7);
+	
 	var _collections = __webpack_require__(2);
 	
-	Meteor.methods({
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	_meteor2.default.methods({
 	  newMessage: function newMessage(message) {
 	    if (!this.userId) {
-	      throw new Meteor.Error('not-logged-in', 'Must be logged in to send message.');
+	      throw new _meteor2.default.Error('not-logged-in', 'Must be logged in to send message.');
 	    }
 	
-	    check(message, Match.OneOf({
+	    (0, _check.check)(message, _check.Match.OneOf({
 	      text: String,
 	      type: String,
 	      chatId: String
@@ -104,27 +124,27 @@
 	  },
 	  updateName: function updateName(name) {
 	    if (!this.userId) {
-	      throw new Meteor.Error('not-logged-in', 'Must be logged in to update his name.');
+	      throw new _meteor2.default.Error('not-logged-in', 'Must be logged in to update his name.');
 	    }
 	
-	    check(name, String);
+	    (0, _check.check)(name, String);
 	
 	    if (name.length === 0) {
-	      throw Meteor.Error('name-required', 'Must provide a user name');
+	      throw _meteor2.default.Error('name-required', 'Must provide a user name');
 	    }
 	
-	    return Meteor.users.update(this.userId, { $set: { 'profile.name': name } });
+	    return _meteor2.default.users.update(this.userId, { $set: { 'profile.name': name } });
 	  },
 	  newChat: function newChat(otherId) {
 	    if (!this.userId) {
-	      throw new Meteor.Error('not-logged-in', 'Must be logged to create a chat.');
+	      throw new _meteor2.default.Error('not-logged-in', 'Must be logged to create a chat.');
 	    }
 	
-	    check(otherId, String);
-	    var otherUser = Meteor.users.findOne(otherId);
+	    (0, _check.check)(otherId, String);
+	    var otherUser = _meteor2.default.users.findOne(otherId);
 	
 	    if (!otherUser) {
-	      throw new Meteor.Error('user-not-exists', 'Chat\'s user not exists');
+	      throw new _meteor2.default.Error('user-not-exists', 'Chat\'s user not exists');
 	    }
 	
 	    var chat = {
@@ -138,15 +158,15 @@
 	  },
 	  removeChat: function removeChat(chatId) {
 	    if (!this.userId) {
-	      throw new Meteor.Error('not-logged-in', 'Must be logged to create a chat.');
+	      throw new _meteor2.default.Error('not-logged-in', 'Must be logged to create a chat.');
 	    }
 	
-	    check(chatId, String);
+	    (0, _check.check)(chatId, String);
 	
 	    var chat = _collections.Chats.findOne(chatId);
 	
-	    if (!chat || !_.include(chat.userIds, this.userId)) {
-	      throw new Meteor.Error('chat-not-exists', 'Chat not exists');
+	    if (!chat || !_underscore._.include(chat.userIds, this.userId)) {
+	      throw new _meteor2.default.Error('chat-not-exists', 'Chat not exists');
 	    }
 	
 	    _collections.Messages.remove({ chatId: chatId });
@@ -155,17 +175,35 @@
 	  },
 	  updatePicture: function updatePicture(data) {
 	    if (!this.userId) {
-	      throw new Meteor.Error('not-logged-in', 'Must be logged in to update his picture.');
+	      throw new _meteor2.default.Error('not-logged-in', 'Must be logged in to update his picture.');
 	    }
 	
-	    check(data, String);
+	    (0, _check.check)(data, String);
 	
-	    return Meteor.users.update(this.userId, { $set: { 'profile.picture': data } });
+	    return _meteor2.default.users.update(this.userId, { $set: { 'profile.picture': data } });
 	  }
 	});
 
 /***/ },
-/* 4 */
+/* 5 */
+/***/ function(module, exports) {
+
+	module.exports = Meteor;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	module.exports = Package["underscore"];
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	module.exports = Package["check"];
+
+/***/ },
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -175,85 +213,124 @@
 	});
 	exports.App = undefined;
 	
-	var _definer = __webpack_require__(5);
+	var _angular = __webpack_require__(9);
+	
+	var _angular2 = _interopRequireDefault(_angular);
+	
+	var _ionic = __webpack_require__(10);
+	
+	var _ionic2 = _interopRequireDefault(_ionic);
+	
+	var _keyboard = __webpack_require__(11);
+	
+	var _keyboard2 = _interopRequireDefault(_keyboard);
+	
+	var _statusBar = __webpack_require__(12);
+	
+	var _statusBar2 = _interopRequireDefault(_statusBar);
+	
+	var _definer = __webpack_require__(13);
 	
 	var _definer2 = _interopRequireDefault(_definer);
 	
-	var _chats = __webpack_require__(7);
+	var _chats = __webpack_require__(15);
 	
 	var _chats2 = _interopRequireDefault(_chats);
 	
-	var _chat = __webpack_require__(8);
+	var _chat = __webpack_require__(16);
 	
 	var _chat2 = _interopRequireDefault(_chat);
 	
-	var _confirmation = __webpack_require__(9);
+	var _confirmation = __webpack_require__(17);
 	
 	var _confirmation2 = _interopRequireDefault(_confirmation);
 	
-	var _login = __webpack_require__(10);
+	var _login = __webpack_require__(18);
 	
 	var _login2 = _interopRequireDefault(_login);
 	
-	var _newChat = __webpack_require__(11);
+	var _newChat = __webpack_require__(20);
 	
 	var _newChat2 = _interopRequireDefault(_newChat);
 	
-	var _profile = __webpack_require__(12);
+	var _profile = __webpack_require__(21);
 	
 	var _profile2 = _interopRequireDefault(_profile);
 	
-	var _settings = __webpack_require__(13);
+	var _settings = __webpack_require__(22);
 	
 	var _settings2 = _interopRequireDefault(_settings);
 	
-	var _input = __webpack_require__(14);
+	var _input = __webpack_require__(23);
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	var _calendar = __webpack_require__(15);
+	var _calendar = __webpack_require__(24);
 	
 	var _calendar2 = _interopRequireDefault(_calendar);
 	
-	var _chatName = __webpack_require__(16);
+	var _chatName = __webpack_require__(26);
 	
 	var _chatName2 = _interopRequireDefault(_chatName);
 	
-	var _chatPicture = __webpack_require__(17);
+	var _chatPicture = __webpack_require__(27);
 	
 	var _chatPicture2 = _interopRequireDefault(_chatPicture);
 	
-	var _newChat3 = __webpack_require__(18);
+	var _newChat3 = __webpack_require__(28);
 	
 	var _newChat4 = _interopRequireDefault(_newChat3);
 	
-	var _routes = __webpack_require__(19);
+	var _routes = __webpack_require__(29);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var App = exports.App = angular.module('Whatsapp', ['angular-meteor', 'angular-meteor.auth', 'angularMoment', 'ionic']);
+	var App = exports.App = _angular2.default.module('Whatsapp', ['angular-meteor', 'angular-meteor.auth', 'angularMoment', 'ionic']);
 	
 	new _definer2.default(App).define(_chats2.default).define(_chat2.default).define(_confirmation2.default).define(_login2.default).define(_newChat2.default).define(_profile2.default).define(_settings2.default).define(_input2.default).define(_calendar2.default).define(_chatName2.default).define(_chatPicture2.default).define(_newChat4.default).define(_routes.RoutesConfig).define(_routes.RoutesRunner);
 	
-	ionic.Platform.ready(function () {
-	  var Keyboard = Meteor.isCordova && cordova.plugins && cordova.plugins.Keyboard;
-	
-	  if (Keyboard) {
-	    Keyboard.hideKeyboardAccessoryBar(true);
-	    Keyboard.disableScroll(true);
-	  }
-	  if (window.StatusBar) {
-	    StatusBar.styleLightContent();
+	_ionic2.default.Platform.ready(function () {
+	  if (_keyboard2.default) {
+	    _keyboard2.default.hideKeyboardAccessoryBar(true);
+	    _keyboard2.default.disableScroll(true);
 	  }
 	
-	  angular.bootstrap(document, ['Whatsapp']);
+	  if (_statusBar2.default) {
+	    _statusBar2.default.styleLightContent();
+	  }
+	
+	  _angular2.default.bootstrap(document, ['Whatsapp']);
 	});
 
 /***/ },
-/* 5 */
+/* 9 */
+/***/ function(module, exports) {
+
+	module.exports = angular;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = ionic;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = this.cordova && cordova.plugins && cordova.plugins.Keyboard;
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	module.exports = this.cordova && cordova.plugins && cordova.plugins.StatusBar;
+
+/***/ },
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -261,11 +338,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(6);
+	var _angular = __webpack_require__(9);
+	
+	var _angular2 = _interopRequireDefault(_angular);
+	
+	var _underscore = __webpack_require__(6);
+	
+	var _entities = __webpack_require__(14);
 	
 	var Entities = _interopRequireWildcard(_entities);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -273,17 +358,17 @@
 	  function Definer(module, dependencies) {
 	    _classCallCheck(this, Definer);
 	
-	    if (_.isString(module)) {
-	      module = angular.module(module, dependencies);
+	    if (_underscore._.isString(module)) {
+	      module = _angular2.default.module(module, dependencies);
 	    }
 	
 	    this.module = module;
 	  }
 	
 	  _createClass(Definer, [{
-	    key: "define",
+	    key: 'define',
 	    value: function define(Entity) {
-	      if (_.isFunction(Entity)) {
+	      if (_underscore._.isFunction(Entity)) {
 	        var proto = Entity.prototype;
 	        Entity.$inject = Entity.$inject || [];
 	
@@ -301,22 +386,22 @@
 	      return this;
 	    }
 	  }, {
-	    key: "_defineProvider",
+	    key: '_defineProvider',
 	    value: function _defineProvider(Provider) {
 	      this.module.provider(Provider.name, Provider);
 	    }
 	  }, {
-	    key: "_defineController",
+	    key: '_defineController',
 	    value: function _defineController(Controller) {
 	      this.module.controller(Controller.name, Controller);
 	    }
 	  }, {
-	    key: "_defineService",
+	    key: '_defineService',
 	    value: function _defineService(Service) {
 	      this.module.service(Service.name, Service);
 	    }
 	  }, {
-	    key: "_defineDecorator",
+	    key: '_defineDecorator',
 	    value: function _defineDecorator(Decorator) {
 	      function handler() {
 	        var decorator = new (Function.prototype.bind.apply(Decorator, [null].concat(Array.prototype.slice.call(arguments))))();
@@ -327,7 +412,7 @@
 	      this.module.decorator(Decorator.name, handler);
 	    }
 	  }, {
-	    key: "_defineDirective",
+	    key: '_defineDirective',
 	    value: function _defineDirective(Directive) {
 	      function handler() {
 	        return new (Function.prototype.bind.apply(Directive, [null].concat(Array.prototype.slice.call(arguments))))();
@@ -337,7 +422,7 @@
 	      this.module.directive(Directive.name, handler);
 	    }
 	  }, {
-	    key: "_defineFactory",
+	    key: '_defineFactory',
 	    value: function _defineFactory(Factory) {
 	      function handler() {
 	        var factory = new (Function.prototype.bind.apply(Factory, [null].concat(Array.prototype.slice.call(arguments))))();
@@ -348,7 +433,7 @@
 	      this.module.factory(Factory.name, handler);
 	    }
 	  }, {
-	    key: "_defineFilter",
+	    key: '_defineFilter',
 	    value: function _defineFilter(Filter) {
 	      function handler() {
 	        var filter = new (Function.prototype.bind.apply(Filter, [null].concat(Array.prototype.slice.call(arguments))))();
@@ -359,7 +444,7 @@
 	      this.module.filter(Filter.name, handler);
 	    }
 	  }, {
-	    key: "_defineConfig",
+	    key: '_defineConfig',
 	    value: function _defineConfig(Config) {
 	      function handler() {
 	        var config = new (Function.prototype.bind.apply(Config, [null].concat(Array.prototype.slice.call(arguments))))();
@@ -370,7 +455,7 @@
 	      this.module.config(handler);
 	    }
 	  }, {
-	    key: "_defineRunner",
+	    key: '_defineRunner',
 	    value: function _defineRunner(Runner) {
 	      function handler() {
 	        var runner = new (Function.prototype.bind.apply(Runner, [null].concat(Array.prototype.slice.call(arguments))))();
@@ -389,7 +474,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 6 */
+/* 14 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -575,7 +660,7 @@
 	}(Injectable);
 
 /***/ },
-/* 7 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -588,7 +673,7 @@
 	
 	var _collections = __webpack_require__(2);
 	
-	var _entities = __webpack_require__(6);
+	var _entities = __webpack_require__(14);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -634,7 +719,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 8 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -645,9 +730,21 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
+	var _ionic = __webpack_require__(10);
+	
+	var _ionic2 = _interopRequireDefault(_ionic);
+	
+	var _keyboard = __webpack_require__(11);
+	
+	var _keyboard2 = _interopRequireDefault(_keyboard);
+	
+	var _underscore = __webpack_require__(6);
+	
 	var _collections = __webpack_require__(2);
 	
-	var _entities = __webpack_require__(6);
+	var _entities = __webpack_require__(14);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -664,8 +761,7 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ChatCtrl).apply(this, arguments));
 	
 	    _this.chatId = _this.$stateParams.chatId;
-	    _this.isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
-	    _this.isCordova = Meteor.isCordova;
+	    _this.isIOS = _ionic2.default.Platform.isWebView() && _ionic2.default.Platform.isIOS();
 	
 	    _this.helpers({
 	      messages: function messages() {
@@ -683,7 +779,7 @@
 	  _createClass(ChatCtrl, [{
 	    key: 'sendMessage',
 	    value: function sendMessage() {
-	      if (_.isEmpty(this.message)) return;
+	      if (_underscore._.isEmpty(this.message)) return;
 	
 	      this.callMethod('newMessage', {
 	        text: this.message,
@@ -718,8 +814,8 @@
 	  }, {
 	    key: 'closeKeyboard',
 	    value: function closeKeyboard() {
-	      if (this.isCordova) {
-	        cordova.plugins.Keyboard.close();
+	      if (_keyboard2.default) {
+	        _keyboard2.default.close();
 	      }
 	    }
 	  }, {
@@ -761,7 +857,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 9 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -772,7 +868,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(6);
+	var _underscore = __webpack_require__(6);
+	
+	var _entities = __webpack_require__(14);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -797,7 +895,7 @@
 	    value: function confirm() {
 	      var _this2 = this;
 	
-	      if (_.isEmpty(this.code)) return;
+	      if (_underscore._.isEmpty(this.code)) return;
 	
 	      Accounts.verifyPhone(this.phone, this.code, function (err) {
 	        if (err) return _this2.handleError(err);
@@ -827,7 +925,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 10 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -838,7 +936,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(6);
+	var _underscore = __webpack_require__(6);
+	
+	var _accountsBase = __webpack_require__(19);
+	
+	var _entities = __webpack_require__(14);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -860,7 +962,7 @@
 	    value: function login() {
 	      var _this2 = this;
 	
-	      if (_.isEmpty(this.phone)) return;
+	      if (_underscore._.isEmpty(this.phone)) return;
 	
 	      var confirmPopup = this.$ionicPopup.confirm({
 	        title: 'Number confirmation',
@@ -879,7 +981,7 @@
 	          template: 'Sending verification code...'
 	        });
 	
-	        Accounts.requestPhoneVerification(_this2.phone, function (err) {
+	        _accountsBase.Accounts.requestPhoneVerification(_this2.phone, function (err) {
 	          _this2.$ionicLoading.hide();
 	          if (err) return _this2.handleError(err);
 	          _this2.$state.go('confirmation', { phone: _this2.phone });
@@ -909,7 +1011,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 11 */
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = Package["accounts-base"];
+
+/***/ },
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -920,9 +1028,15 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
+	var _meteor = __webpack_require__(5);
+	
+	var _meteor2 = _interopRequireDefault(_meteor);
+	
 	var _collections = __webpack_require__(2);
 	
-	var _entities = __webpack_require__(6);
+	var _entities = __webpack_require__(14);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -942,7 +1056,7 @@
 	
 	    _this.helpers({
 	      users: function users() {
-	        return Meteor.users.find({ _id: { $ne: this.currentUserId } });
+	        return _meteor2.default.users.find({ _id: { $ne: this.currentUserId } });
 	      }
 	    });
 	    return _this;
@@ -999,7 +1113,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 12 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1010,7 +1124,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(6);
+	var _underscore = __webpack_require__(6);
+	
+	var _entities = __webpack_require__(14);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1036,7 +1152,7 @@
 	    value: function updateName() {
 	      var _this2 = this;
 	
-	      if (_.isEmpty(this.name)) return;
+	      if (_underscore._.isEmpty(this.name)) return;
 	
 	      this.callMethod('updateName', this.name, function (err) {
 	        if (err) return _this2.handleError(err);
@@ -1046,7 +1162,6 @@
 	  }, {
 	    key: 'handleError',
 	    value: function handleError(err) {
-	      if (err.error == 'cancel') return;
 	      this.$log.error('Profile save error ', err);
 	
 	      this.$ionicPopup.alert({
@@ -1067,7 +1182,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 13 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1078,7 +1193,13 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(6);
+	var _meteor = __webpack_require__(5);
+	
+	var _meteor2 = _interopRequireDefault(_meteor);
+	
+	var _entities = __webpack_require__(14);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1128,7 +1249,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 14 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1139,7 +1260,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(6);
+	var _entities = __webpack_require__(14);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1213,7 +1334,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 15 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1224,7 +1345,13 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(6);
+	var _moment = __webpack_require__(25);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
+	var _entities = __webpack_require__(14);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1246,7 +1373,7 @@
 	    value: function filter(time) {
 	      if (!time) return;
 	
-	      return moment(time).calendar(null, {
+	      return (0, _moment2.default)(time).calendar(null, {
 	        lastDay: '[Yesterday]',
 	        sameDay: 'LT',
 	        lastWeek: 'dddd',
@@ -1262,7 +1389,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 16 */
+/* 25 */
+/***/ function(module, exports) {
+
+	module.exports = moment;
+
+/***/ },
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1273,7 +1406,15 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(6);
+	var _meteor = __webpack_require__(5);
+	
+	var _meteor2 = _interopRequireDefault(_meteor);
+	
+	var _underscore = __webpack_require__(6);
+	
+	var _entities = __webpack_require__(14);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1295,8 +1436,8 @@
 	    value: function filter(chat) {
 	      if (!chat) return;
 	
-	      var otherId = _.without(chat.userIds, Meteor.userId())[0];
-	      var otherUser = Meteor.users.findOne(otherId);
+	      var otherId = _underscore._.without(chat.userIds, _meteor2.default.userId())[0];
+	      var otherUser = _meteor2.default.users.findOne(otherId);
 	      var hasName = otherUser && otherUser.profile && otherUser.profile.name;
 	
 	      return hasName ? otherUser.profile.name : chat.name || 'NO NAME';
@@ -1310,7 +1451,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 17 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1321,7 +1462,15 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(6);
+	var _meteor = __webpack_require__(5);
+	
+	var _meteor2 = _interopRequireDefault(_meteor);
+	
+	var _underscore = __webpack_require__(6);
+	
+	var _entities = __webpack_require__(14);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1343,8 +1492,8 @@
 	    value: function filter(chat) {
 	      if (!chat) return;
 	
-	      var otherId = _.without(chat.userIds, Meteor.userId())[0];
-	      var otherUser = Meteor.users.findOne(otherId);
+	      var otherId = _underscore._.without(chat.userIds, _meteor2.default.userId())[0];
+	      var otherUser = _meteor2.default.users.findOne(otherId);
 	      var hasPicture = otherUser && otherUser.profile && otherUser.profile.picture;
 	
 	      return hasPicture ? otherUser.profile.picture : chat.picture || '/img/user-default.svg';
@@ -1358,7 +1507,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 18 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1369,7 +1518,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(6);
+	var _entities = __webpack_require__(14);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1421,7 +1570,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 19 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1433,7 +1582,15 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(6);
+	var _meteor = __webpack_require__(5);
+	
+	var _meteor2 = _interopRequireDefault(_meteor);
+	
+	var _underscore = __webpack_require__(6);
+	
+	var _entities = __webpack_require__(14);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1463,7 +1620,7 @@
 	        resolve: {
 	          user: this.isAuthorized,
 	          chats: function chats() {
-	            return Meteor.subscribe('chats');
+	            return _meteor2.default.subscribe('chats');
 	          }
 	        }
 	      }).state('tab.chats', {
@@ -1538,7 +1695,7 @@
 	          args[_key] = arguments[_key];
 	        }
 	
-	        var err = _.last(args);
+	        var err = _underscore._.last(args);
 	
 	        if (err === 'AUTH_REQUIRED') {
 	          _this3.$state.go('login');
@@ -1555,4 +1712,4 @@
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=bundle.js.map
+//# sourceMappingURL=app.bundle.js.map

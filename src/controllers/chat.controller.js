@@ -1,3 +1,6 @@
+import ionic from 'ionic';
+import keyboard from 'cordova/keyboard';
+import { _ } from 'meteor/underscore';
 import { Chats, Messages } from 'server/collections';
 import { Controller } from '../entities';
 
@@ -7,7 +10,6 @@ export default class ChatCtrl extends Controller {
 
     this.chatId = this.$stateParams.chatId;
     this.isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
-    this.isCordova = Meteor.isCordova;
 
     this.helpers({
       messages() {
@@ -52,8 +54,8 @@ export default class ChatCtrl extends Controller {
   }
 
   closeKeyboard () {
-    if (this.isCordova) {
-      cordova.plugins.Keyboard.close();
+    if (keyboard) {
+      keyboard.close();
     }
   }
 

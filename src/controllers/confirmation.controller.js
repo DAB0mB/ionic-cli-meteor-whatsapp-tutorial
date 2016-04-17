@@ -1,3 +1,4 @@
+import { _ } from 'meteor/underscore';
 import { Controller } from '../entities';
 
 export default class ConfirmationCtrl extends Controller {

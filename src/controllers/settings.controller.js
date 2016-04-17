@@ -1,3 +1,4 @@
+import meteor from 'meteor';
 import { Controller } from '../entities';
 
 export default class SettingsCtrl extends Controller {
@@ -8,7 +9,7 @@ export default class SettingsCtrl extends Controller {
     })
   }
 
-  handleError (err) {
+  handleError(err) {
     this.$log.error('Settings modification error', err);
 
     this.$ionicPopup.alert({

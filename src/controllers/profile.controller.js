@@ -1,3 +1,4 @@
+import { _ } from 'meteor/underscore';
 import { Controller } from '../entities';
 
 export default class ProfileCtrl extends Controller {
@@ -18,7 +19,6 @@ export default class ProfileCtrl extends Controller {
   }
 
   handleError(err) {
-    if (err.error == 'cancel') return;
     this.$log.error('Profile save error ', err);
 
     this.$ionicPopup.alert({

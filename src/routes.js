@@ -1,3 +1,5 @@
+import meteor from 'meteor';
+import { _ } from 'meteor/underscore';
 import { Config, Runner } from './entities';
 
 export class RoutesConfig extends Config {
@@ -16,7 +18,7 @@ export class RoutesConfig extends Config {
         resolve: {
           user: this.isAuthorized,
           chats() {
-            return Meteor.subscribe('chats');
+            return meteor.subscribe('chats');
           }
         }
       })

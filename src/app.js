@@ -1,3 +1,8 @@
+import angular from 'angular';
+import ionic from 'ionic';
+import keyboard from 'cordova/keyboard';
+import statusbar from 'cordova/status-bar';
+
 import Definer from './definer';
 import ChatsCtrl from './controllers/chats.controller';
 import ChatCtrl from './controllers/chat.controller';
@@ -37,14 +42,13 @@ new Definer(App)
   .define(RoutesRunner);
 
 ionic.Platform.ready(() => {
-  const Keyboard = Meteor.isCordova && cordova.plugins && cordova.plugins.Keyboard;
-
-  if (Keyboard) {
-    Keyboard.hideKeyboardAccessoryBar(true);
-    Keyboard.disableScroll(true);
+  if (keyboard) {
+    keyboard.hideKeyboardAccessoryBar(true);
+    keyboard.disableScroll(true);
   }
-  if (window.StatusBar) {
-    StatusBar.styleLightContent();
+
+  if (statusbar) {
+    statusbar.styleLightContent();
   }
 
   angular.bootstrap(document, ['Whatsapp']);
