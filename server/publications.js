@@ -1,11 +1,10 @@
-import meteor from 'meteor';
 import { Chats, Messages } from './collections';
 
-meteor.publish('users', function() {
-  return meteor.users.find({}, { fields: { profile: 1 } });
+Meteor.publish('users', function() {
+  return Meteor.users.find({}, { fields: { profile: 1 } });
 });
 
-meteor.publishComposite('chats', function() {
+Meteor.publishComposite('chats', function() {
   if (!this.userId) return;
 
   return {
@@ -23,7 +22,7 @@ meteor.publishComposite('chats', function() {
           const query = { _id: { $in: chat.userIds } };
           const options = { fields: { profile: 1 } };
 
-          return meteor.users.find(query, options);
+          return Meteor.users.find(query, options);
         }
       }
     ]

@@ -1,12 +1,11 @@
-import meteor from 'meteor';
 import { _ } from 'meteor/underscore';
 import { check, Match } from 'meteor/check';
 import { Chats, Messages } from './collections';
 
-meteor.methods({
+Meteor.methods({
   newMessage(message) {
     if (!this.userId) {
-      throw new meteor.Error('not-logged-in',
+      throw new Meteor.Error('not-logged-in',
         'Must be logged in to send message.');
     }
 
@@ -33,29 +32,29 @@ meteor.methods({
   },
   updateName(name) {
     if (!this.userId) {
-      throw new meteor.Error('not-logged-in',
+      throw new Meteor.Error('not-logged-in',
         'Must be logged in to update his name.');
     }
 
     check(name, String);
 
     if (name.length === 0) {
-      throw meteor.Error('name-required', 'Must provide a user name');
+      throw Meteor.Error('name-required', 'Must provide a user name');
     }
 
-    return meteor.users.update(this.userId, { $set: { 'profile.name': name } });
+    return Meteor.users.update(this.userId, { $set: { 'profile.name': name } });
   },
   newChat(otherId) {
     if (!this.userId) {
-      throw new meteor.Error('not-logged-in',
+      throw new Meteor.Error('not-logged-in',
         'Must be logged to create a chat.');
     }
 
     check(otherId, String);
-    const otherUser = meteor.users.findOne(otherId);
+    const otherUser = Meteor.users.findOne(otherId);
 
     if (!otherUser) {
-      throw new meteor.Error('user-not-exists',
+      throw new Meteor.Error('user-not-exists',
         'Chat\'s user not exists');
     }
 
@@ -70,7 +69,7 @@ meteor.methods({
   },
   removeChat(chatId) {
     if (!this.userId) {
-      throw new meteor.Error('not-logged-in',
+      throw new Meteor.Error('not-logged-in',
         'Must be logged to create a chat.');
     }
 
@@ -79,7 +78,7 @@ meteor.methods({
     const chat = Chats.findOne(chatId);
 
     if (!chat || !_.include(chat.userIds, this.userId)) {
-      throw new meteor.Error('chat-not-exists',
+      throw new Meteor.Error('chat-not-exists',
         'Chat not exists');
     }
 
@@ -89,12 +88,12 @@ meteor.methods({
   },
   updatePicture(data) {
     if (!this.userId) {
-      throw new meteor.Error('not-logged-in',
+      throw new Meteor.Error('not-logged-in',
         'Must be logged in to update his picture.');
     }
 
     check(data, String);
 
-    return meteor.users.update(this.userId, { $set: { 'profile.picture': data } });
+    return Meteor.users.update(this.userId, { $set: { 'profile.picture': data } });
   }
 });

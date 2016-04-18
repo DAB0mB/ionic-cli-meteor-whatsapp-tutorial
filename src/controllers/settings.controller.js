@@ -1,4 +1,3 @@
-import meteor from 'meteor';
 import { Controller } from '../entities';
 
 export default class SettingsCtrl extends Controller {

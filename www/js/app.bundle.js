@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	module.exports = __webpack_require__(8);
+	module.exports = __webpack_require__(7);
 
 
 /***/ },
@@ -86,22 +86,16 @@
 
 	'use strict';
 	
-	var _meteor = __webpack_require__(5);
+	var _underscore = __webpack_require__(5);
 	
-	var _meteor2 = _interopRequireDefault(_meteor);
-	
-	var _underscore = __webpack_require__(6);
-	
-	var _check = __webpack_require__(7);
+	var _check = __webpack_require__(6);
 	
 	var _collections = __webpack_require__(2);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	_meteor2.default.methods({
+	Meteor.methods({
 	  newMessage: function newMessage(message) {
 	    if (!this.userId) {
-	      throw new _meteor2.default.Error('not-logged-in', 'Must be logged in to send message.');
+	      throw new Meteor.Error('not-logged-in', 'Must be logged in to send message.');
 	    }
 	
 	    (0, _check.check)(message, _check.Match.OneOf({
@@ -124,27 +118,27 @@
 	  },
 	  updateName: function updateName(name) {
 	    if (!this.userId) {
-	      throw new _meteor2.default.Error('not-logged-in', 'Must be logged in to update his name.');
+	      throw new Meteor.Error('not-logged-in', 'Must be logged in to update his name.');
 	    }
 	
 	    (0, _check.check)(name, String);
 	
 	    if (name.length === 0) {
-	      throw _meteor2.default.Error('name-required', 'Must provide a user name');
+	      throw Meteor.Error('name-required', 'Must provide a user name');
 	    }
 	
-	    return _meteor2.default.users.update(this.userId, { $set: { 'profile.name': name } });
+	    return Meteor.users.update(this.userId, { $set: { 'profile.name': name } });
 	  },
 	  newChat: function newChat(otherId) {
 	    if (!this.userId) {
-	      throw new _meteor2.default.Error('not-logged-in', 'Must be logged to create a chat.');
+	      throw new Meteor.Error('not-logged-in', 'Must be logged to create a chat.');
 	    }
 	
 	    (0, _check.check)(otherId, String);
-	    var otherUser = _meteor2.default.users.findOne(otherId);
+	    var otherUser = Meteor.users.findOne(otherId);
 	
 	    if (!otherUser) {
-	      throw new _meteor2.default.Error('user-not-exists', 'Chat\'s user not exists');
+	      throw new Meteor.Error('user-not-exists', 'Chat\'s user not exists');
 	    }
 	
 	    var chat = {
@@ -158,7 +152,7 @@
 	  },
 	  removeChat: function removeChat(chatId) {
 	    if (!this.userId) {
-	      throw new _meteor2.default.Error('not-logged-in', 'Must be logged to create a chat.');
+	      throw new Meteor.Error('not-logged-in', 'Must be logged to create a chat.');
 	    }
 	
 	    (0, _check.check)(chatId, String);
@@ -166,7 +160,7 @@
 	    var chat = _collections.Chats.findOne(chatId);
 	
 	    if (!chat || !_underscore._.include(chat.userIds, this.userId)) {
-	      throw new _meteor2.default.Error('chat-not-exists', 'Chat not exists');
+	      throw new Meteor.Error('chat-not-exists', 'Chat not exists');
 	    }
 	
 	    _collections.Messages.remove({ chatId: chatId });
@@ -175,12 +169,12 @@
 	  },
 	  updatePicture: function updatePicture(data) {
 	    if (!this.userId) {
-	      throw new _meteor2.default.Error('not-logged-in', 'Must be logged in to update his picture.');
+	      throw new Meteor.Error('not-logged-in', 'Must be logged in to update his picture.');
 	    }
 	
 	    (0, _check.check)(data, String);
 	
-	    return _meteor2.default.users.update(this.userId, { $set: { 'profile.picture': data } });
+	    return Meteor.users.update(this.userId, { $set: { 'profile.picture': data } });
 	  }
 	});
 
@@ -188,22 +182,16 @@
 /* 5 */
 /***/ function(module, exports) {
 
-	module.exports = Meteor;
+	module.exports = Package["underscore"];
 
 /***/ },
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = Package["underscore"];
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
 	module.exports = Package["check"];
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -213,75 +201,75 @@
 	});
 	exports.App = undefined;
 	
-	var _angular = __webpack_require__(9);
+	var _angular = __webpack_require__(8);
 	
 	var _angular2 = _interopRequireDefault(_angular);
 	
-	var _ionic = __webpack_require__(10);
+	var _ionic = __webpack_require__(9);
 	
 	var _ionic2 = _interopRequireDefault(_ionic);
 	
-	var _keyboard = __webpack_require__(11);
+	var _keyboard = __webpack_require__(10);
 	
 	var _keyboard2 = _interopRequireDefault(_keyboard);
 	
-	var _statusBar = __webpack_require__(12);
+	var _statusBar = __webpack_require__(11);
 	
 	var _statusBar2 = _interopRequireDefault(_statusBar);
 	
-	var _definer = __webpack_require__(13);
+	var _definer = __webpack_require__(12);
 	
 	var _definer2 = _interopRequireDefault(_definer);
 	
-	var _chats = __webpack_require__(15);
+	var _chats = __webpack_require__(14);
 	
 	var _chats2 = _interopRequireDefault(_chats);
 	
-	var _chat = __webpack_require__(16);
+	var _chat = __webpack_require__(15);
 	
 	var _chat2 = _interopRequireDefault(_chat);
 	
-	var _confirmation = __webpack_require__(17);
+	var _confirmation = __webpack_require__(16);
 	
 	var _confirmation2 = _interopRequireDefault(_confirmation);
 	
-	var _login = __webpack_require__(18);
+	var _login = __webpack_require__(17);
 	
 	var _login2 = _interopRequireDefault(_login);
 	
-	var _newChat = __webpack_require__(20);
+	var _newChat = __webpack_require__(19);
 	
 	var _newChat2 = _interopRequireDefault(_newChat);
 	
-	var _profile = __webpack_require__(21);
+	var _profile = __webpack_require__(20);
 	
 	var _profile2 = _interopRequireDefault(_profile);
 	
-	var _settings = __webpack_require__(22);
+	var _settings = __webpack_require__(21);
 	
 	var _settings2 = _interopRequireDefault(_settings);
 	
-	var _input = __webpack_require__(23);
+	var _input = __webpack_require__(22);
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	var _calendar = __webpack_require__(24);
+	var _calendar = __webpack_require__(23);
 	
 	var _calendar2 = _interopRequireDefault(_calendar);
 	
-	var _chatName = __webpack_require__(26);
+	var _chatName = __webpack_require__(25);
 	
 	var _chatName2 = _interopRequireDefault(_chatName);
 	
-	var _chatPicture = __webpack_require__(27);
+	var _chatPicture = __webpack_require__(26);
 	
 	var _chatPicture2 = _interopRequireDefault(_chatPicture);
 	
-	var _newChat3 = __webpack_require__(28);
+	var _newChat3 = __webpack_require__(27);
 	
 	var _newChat4 = _interopRequireDefault(_newChat3);
 	
-	var _routes = __webpack_require__(29);
+	var _routes = __webpack_require__(28);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -303,31 +291,31 @@
 	});
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports) {
 
 	module.exports = angular;
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = ionic;
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports) {
 
 	module.exports = this.cordova && cordova.plugins && cordova.plugins.Keyboard;
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = this.cordova && cordova.plugins && cordova.plugins.StatusBar;
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -338,13 +326,13 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _angular = __webpack_require__(9);
+	var _angular = __webpack_require__(8);
 	
 	var _angular2 = _interopRequireDefault(_angular);
 	
-	var _underscore = __webpack_require__(6);
+	var _underscore = __webpack_require__(5);
 	
-	var _entities = __webpack_require__(14);
+	var _entities = __webpack_require__(13);
 	
 	var Entities = _interopRequireWildcard(_entities);
 	
@@ -474,7 +462,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -660,7 +648,7 @@
 	}(Injectable);
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -673,7 +661,7 @@
 	
 	var _collections = __webpack_require__(2);
 	
-	var _entities = __webpack_require__(14);
+	var _entities = __webpack_require__(13);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -719,7 +707,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -730,19 +718,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _ionic = __webpack_require__(10);
+	var _ionic = __webpack_require__(9);
 	
 	var _ionic2 = _interopRequireDefault(_ionic);
 	
-	var _keyboard = __webpack_require__(11);
+	var _keyboard = __webpack_require__(10);
 	
 	var _keyboard2 = _interopRequireDefault(_keyboard);
 	
-	var _underscore = __webpack_require__(6);
+	var _underscore = __webpack_require__(5);
 	
 	var _collections = __webpack_require__(2);
 	
-	var _entities = __webpack_require__(14);
+	var _entities = __webpack_require__(13);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -857,7 +845,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -868,9 +856,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _underscore = __webpack_require__(6);
+	var _underscore = __webpack_require__(5);
 	
-	var _entities = __webpack_require__(14);
+	var _entities = __webpack_require__(13);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -925,7 +913,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -936,11 +924,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _underscore = __webpack_require__(6);
+	var _underscore = __webpack_require__(5);
 	
-	var _accountsBase = __webpack_require__(19);
+	var _accountsBase = __webpack_require__(18);
 	
-	var _entities = __webpack_require__(14);
+	var _entities = __webpack_require__(13);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1011,13 +999,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports) {
 
 	module.exports = Package["accounts-base"];
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1028,15 +1016,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _meteor = __webpack_require__(5);
-	
-	var _meteor2 = _interopRequireDefault(_meteor);
-	
 	var _collections = __webpack_require__(2);
 	
-	var _entities = __webpack_require__(14);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _entities = __webpack_require__(13);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1056,7 +1038,7 @@
 	
 	    _this.helpers({
 	      users: function users() {
-	        return _meteor2.default.users.find({ _id: { $ne: this.currentUserId } });
+	        return Meteor.users.find({ _id: { $ne: this.currentUserId } });
 	      }
 	    });
 	    return _this;
@@ -1113,7 +1095,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1124,9 +1106,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _underscore = __webpack_require__(6);
+	var _underscore = __webpack_require__(5);
 	
-	var _entities = __webpack_require__(14);
+	var _entities = __webpack_require__(13);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1182,7 +1164,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1193,13 +1175,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _meteor = __webpack_require__(5);
-	
-	var _meteor2 = _interopRequireDefault(_meteor);
-	
-	var _entities = __webpack_require__(14);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _entities = __webpack_require__(13);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1249,7 +1225,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1260,7 +1236,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(14);
+	var _entities = __webpack_require__(13);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1334,7 +1310,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1345,11 +1321,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _moment = __webpack_require__(25);
+	var _moment = __webpack_require__(24);
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
-	var _entities = __webpack_require__(14);
+	var _entities = __webpack_require__(13);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -1389,13 +1365,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports) {
 
 	module.exports = moment;
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1406,15 +1382,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _meteor = __webpack_require__(5);
+	var _underscore = __webpack_require__(5);
 	
-	var _meteor2 = _interopRequireDefault(_meteor);
-	
-	var _underscore = __webpack_require__(6);
-	
-	var _entities = __webpack_require__(14);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _entities = __webpack_require__(13);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1436,8 +1406,8 @@
 	    value: function filter(chat) {
 	      if (!chat) return;
 	
-	      var otherId = _underscore._.without(chat.userIds, _meteor2.default.userId())[0];
-	      var otherUser = _meteor2.default.users.findOne(otherId);
+	      var otherId = _underscore._.without(chat.userIds, Meteor.userId())[0];
+	      var otherUser = Meteor.users.findOne(otherId);
 	      var hasName = otherUser && otherUser.profile && otherUser.profile.name;
 	
 	      return hasName ? otherUser.profile.name : chat.name || 'NO NAME';
@@ -1451,7 +1421,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1462,15 +1432,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _meteor = __webpack_require__(5);
+	var _underscore = __webpack_require__(5);
 	
-	var _meteor2 = _interopRequireDefault(_meteor);
-	
-	var _underscore = __webpack_require__(6);
-	
-	var _entities = __webpack_require__(14);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _entities = __webpack_require__(13);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1492,8 +1456,8 @@
 	    value: function filter(chat) {
 	      if (!chat) return;
 	
-	      var otherId = _underscore._.without(chat.userIds, _meteor2.default.userId())[0];
-	      var otherUser = _meteor2.default.users.findOne(otherId);
+	      var otherId = _underscore._.without(chat.userIds, Meteor.userId())[0];
+	      var otherUser = Meteor.users.findOne(otherId);
 	      var hasPicture = otherUser && otherUser.profile && otherUser.profile.picture;
 	
 	      return hasPicture ? otherUser.profile.picture : chat.picture || '/img/user-default.svg';
@@ -1507,7 +1471,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1518,7 +1482,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _entities = __webpack_require__(14);
+	var _entities = __webpack_require__(13);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1570,7 +1534,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1582,15 +1546,9 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _meteor = __webpack_require__(5);
+	var _underscore = __webpack_require__(5);
 	
-	var _meteor2 = _interopRequireDefault(_meteor);
-	
-	var _underscore = __webpack_require__(6);
-	
-	var _entities = __webpack_require__(14);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _entities = __webpack_require__(13);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1620,7 +1578,7 @@
 	        resolve: {
 	          user: this.isAuthorized,
 	          chats: function chats() {
-	            return _meteor2.default.subscribe('chats');
+	            return Meteor.subscribe('chats');
 	          }
 	        }
 	      }).state('tab.chats', {

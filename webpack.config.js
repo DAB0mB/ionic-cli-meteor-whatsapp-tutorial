@@ -18,7 +18,6 @@ module.exports = {
   },
   externals: [
     {
-      meteor: 'Meteor',
       angular: true,
       cordova: true,
       ionic: true,
