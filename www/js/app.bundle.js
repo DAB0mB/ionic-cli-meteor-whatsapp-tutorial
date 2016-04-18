@@ -760,7 +760,7 @@
 	      }
 	    });
 	
-	    _this.autoScroll();
+	    _this.autoScrollBottom();
 	    return _this;
 	  }
 	
@@ -780,15 +780,11 @@
 	  }, {
 	    key: 'inputUp',
 	    value: function inputUp() {
-	      var _this2 = this;
-	
 	      if (this.isIOS) {
 	        this.keyboardHeight = 216;
 	      }
 	
-	      this.$timeout(function () {
-	        _this2.$ionicScrollDelegate.$getByHandle('chatScroll').scrollBottom(true);
-	      }, 300);
+	      this.scrollBottom(true);
 	    }
 	  }, {
 	    key: 'inputDown',
@@ -807,24 +803,31 @@
 	      }
 	    }
 	  }, {
-	    key: 'autoScroll',
-	    value: function autoScroll() {
-	      var _this3 = this;
+	    key: 'autoScrollBottom',
+	    value: function autoScrollBottom() {
+	      var _this2 = this;
 	
 	      var recentMessagesNum = this.messages.length;
 	
 	      this.autorun(function () {
-	        var currMessagesNum = _this3.getCollectionReactively('messages').length;
+	        var currMessagesNum = _this2.getCollectionReactively('messages').length;
 	        var animate = recentMessagesNum != currMessagesNum;
 	        recentMessagesNum = currMessagesNum;
-	
-	        _this3.$ionicScrollDelegate.$getByHandle('chatScroll').scrollBottom(animate);
+	        _this2.scrollBottom(animate);
 	      });
+	    }
+	  }, {
+	    key: 'scrollBottom',
+	    value: function scrollBottom(animate) {
+	      var _this3 = this;
+	
+	      this.$timeout(function () {
+	        _this3.$ionicScrollDelegate.$getByHandle('chatScroll').scrollBottom(animate);
+	      }, 300);
 	    }
 	  }, {
 	    key: 'handleError',
 	    value: function handleError(err) {
-	      if (err.error == 'cancel') return;
 	      this.$log.error('Profile save error ', err);
 	
 	      this.$ionicPopup.alert({
