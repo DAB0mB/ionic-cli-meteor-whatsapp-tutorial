@@ -1,12 +1,14 @@
 {
   "name": "whatsapp",
-  "app_id": "",
   "gulpStartupTasks": [
+    "webpack",
     "sass",
     "watch"
   ],
   "watchPatterns": [
-    "www/**/*",
-    "!www/lib/**/*"
+    "!server/.meteor",
+    "!www/lib/**/*",
+    "server/**/*",
+    "www/**/*"
   ]
 }

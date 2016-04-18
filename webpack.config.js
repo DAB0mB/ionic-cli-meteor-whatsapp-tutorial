@@ -2,11 +2,6 @@ var camelCase = require('lodash.camelcase');
 var upperFirst = require('lodash.upperfirst');
 var path = require('path');
 
-var patterns = {
-  meteorPack: /^meteor\/(.+)$/,
-  cordovaPack: /^cordova\/(.+)$/
-};
-
 module.exports = {
   entry: [
     './server/common.js',
@@ -46,19 +41,29 @@ module.exports = {
 };
 
 function customExternals(context, request, callback) {
-  var meteorPackMatch = request.match(patterns.meteorPack);
+  return meteorPack(request, callback) ||
+         cordovaPlugin(request, callback) ||
+         callback();
+}
 
-  if (meteorPackMatch) {
-    var packName = meteorPackMatch[1];
-    return callback(null, 'Package["' + packName + '"]');
+function meteorPack(request, callback) {
+  var match = request.match(/^meteor\/(.+)$/);
+  var pack = match && match[1];
+
+  if (pack) {
+    callback(null, 'Package["' + pack + '"]' );
+    return true;
   }
+}
 
-  var cordovaPackMatch = request.match(patterns.cordovaPack);
+function cordovaPlugin(request, callback) {
+  var match = request.match(/^cordova\/(.+)$/);
+  var plugin = match && match[1];
 
-  if (cordovaPackMatch) {
-    var packName = upperFirst(camelCase(cordovaPackMatch[1]));
-    return callback(null, 'this.cordova && cordova.plugins && cordova.plugins.' + packName);
+  if (plugin) {
+    plugin = camelCase(plugin);
+    plugin = upperFirst(plugin);
+    callback(null, 'this.cordova && cordova.plugins && cordova.plugins.' + plugin);
+    return true;
   }
-
-  callback();
 }
