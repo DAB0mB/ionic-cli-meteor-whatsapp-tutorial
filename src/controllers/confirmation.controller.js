@@ -28,4 +28,4 @@ export default class ConfirmationCtrl extends Controller {
   }
 }
 
-ConfirmationCtrl.$inject = ['$scope', '$state', '$ionicPopup', '$log'];
+ConfirmationCtrl.$inject = ['$state', '$ionicPopup', '$log'];

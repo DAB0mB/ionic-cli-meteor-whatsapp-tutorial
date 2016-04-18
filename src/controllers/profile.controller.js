@@ -29,4 +29,4 @@ export default class ProfileCtrl extends Controller {
   }
 }
 
-ProfileCtrl.$inject = ['$scope', '$state', '$ionicPopup', '$log'];
+ProfileCtrl.$inject = ['$state', '$ionicPopup', '$log'];

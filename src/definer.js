@@ -16,12 +16,12 @@ export default class Definer {
       const proto = Entity.prototype;
       Entity.$inject = Entity.$inject || [];
 
-      if (proto instanceof Entities.Controller)
-        this._defineController(Entity);
-      else if (proto instanceof Entities.Provider)
+      if (proto instanceof Entities.Provider)
         this._defineProvider(Entity);
       else if (proto instanceof Entities.Service)
         this._defineService(Entity);
+      else if (proto instanceof Entities.Controller)
+        this._defineController(Entity);
       else if (proto instanceof Entities.Decorator)
         this._defineDecorator(Entity);
       else if (proto instanceof Entities.Directive)
@@ -48,12 +48,18 @@ export default class Definer {
     this.module.provider(Provider.name, Provider);
   }
 
-  _defineController(Controller) {
-    this.module.controller(Controller.name, Controller);
-  }
-
   _defineService(Service) {
     this.module.service(Service.name, Service)
+  }
+
+  _defineController(Controller) {
+    const $inject = Controller.$inject;
+
+    if ($inject.indexOf('$scope') == -1) {
+      $inject.unshift('$scope');
+    }
+
+    this.module.controller(Controller.name, Controller);
   }
 
   _defineDecorator(Decorator) {

@@ -19,4 +19,4 @@ export default class SettingsCtrl extends Controller {
   }
 }
 
-SettingsCtrl.$inject = ['$scope', '$state', '$ionicPopup', '$log'];
+SettingsCtrl.$inject = ['$state', '$ionicPopup', '$log'];

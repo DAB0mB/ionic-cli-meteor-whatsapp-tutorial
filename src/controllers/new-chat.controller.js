@@ -48,4 +48,4 @@ export default class NewChatCtrl extends Controller {
   }
 }
 
-NewChatCtrl.$inject = ['$scope', '$state', 'NewChat', '$ionicPopup', '$log'];
+NewChatCtrl.$inject = ['$state', 'NewChat', '$ionicPopup', '$log'];

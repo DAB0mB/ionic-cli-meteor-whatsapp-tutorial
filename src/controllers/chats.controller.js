@@ -21,4 +21,4 @@ export default class ChatsCtrl extends Controller {
   }
 }
 
-ChatsCtrl.$inject = ['$scope', 'NewChat'];
+ChatsCtrl.$inject = ['NewChat'];

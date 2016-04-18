@@ -360,7 +360,7 @@
 	        var proto = Entity.prototype;
 	        Entity.$inject = Entity.$inject || [];
 	
-	        if (proto instanceof Entities.Controller) this._defineController(Entity);else if (proto instanceof Entities.Provider) this._defineProvider(Entity);else if (proto instanceof Entities.Service) this._defineService(Entity);else if (proto instanceof Entities.Decorator) this._defineDecorator(Entity);else if (proto instanceof Entities.Directive) this._defineDirective(Entity);else if (proto instanceof Entities.Factory) this._defineFactory(Entity);else if (proto instanceof Entities.Filter) this._defineFilter(Entity);else if (proto instanceof Entities.Config) this._defineConfig(Entity);else if (proto instanceof Entities.Runner) this._defineRunner(Entity);else throw Error("can't define unknown entity type");
+	        if (proto instanceof Entities.Provider) this._defineProvider(Entity);else if (proto instanceof Entities.Service) this._defineService(Entity);else if (proto instanceof Entities.Controller) this._defineController(Entity);else if (proto instanceof Entities.Decorator) this._defineDecorator(Entity);else if (proto instanceof Entities.Directive) this._defineDirective(Entity);else if (proto instanceof Entities.Factory) this._defineFactory(Entity);else if (proto instanceof Entities.Filter) this._defineFilter(Entity);else if (proto instanceof Entities.Config) this._defineConfig(Entity);else if (proto instanceof Entities.Runner) this._defineRunner(Entity);else throw Error("can't define unknown entity type");
 	      } else {
 	        var _module;
 	
@@ -379,14 +379,21 @@
 	      this.module.provider(Provider.name, Provider);
 	    }
 	  }, {
-	    key: '_defineController',
-	    value: function _defineController(Controller) {
-	      this.module.controller(Controller.name, Controller);
-	    }
-	  }, {
 	    key: '_defineService',
 	    value: function _defineService(Service) {
 	      this.module.service(Service.name, Service);
+	    }
+	  }, {
+	    key: '_defineController',
+	    value: function _defineController(Controller) {
+	      var $inject = Controller.$inject || [];
+	      Controller.$inject = $inject;
+	
+	      if ($inject.indexOf('$scope') == -1) {
+	        $inject.unshift('$scope');
+	      }
+	
+	      this.module.controller(Controller.name, Controller);
 	    }
 	  }, {
 	    key: '_defineDecorator',
@@ -703,7 +710,7 @@
 	exports.default = ChatsCtrl;
 	
 	
-	ChatsCtrl.$inject = ['$scope', 'NewChat'];
+	ChatsCtrl.$inject = ['NewChat'];
 	module.exports = exports['default'];
 
 /***/ },
@@ -844,7 +851,7 @@
 	exports.default = ChatCtrl;
 	
 	
-	ChatCtrl.$inject = ['$scope', '$stateParams', '$timeout', '$ionicScrollDelegate', '$ionicPopup', '$log'];
+	ChatCtrl.$inject = ['$stateParams', '$timeout', '$ionicScrollDelegate', '$ionicPopup', '$log'];
 	module.exports = exports['default'];
 
 /***/ },
@@ -912,7 +919,7 @@
 	exports.default = ConfirmationCtrl;
 	
 	
-	ConfirmationCtrl.$inject = ['$scope', '$state', '$ionicPopup', '$log'];
+	ConfirmationCtrl.$inject = ['$state', '$ionicPopup', '$log'];
 	module.exports = exports['default'];
 
 /***/ },
@@ -998,7 +1005,7 @@
 	exports.default = LoginCtrl;
 	
 	
-	LoginCtrl.$inject = ['$scope', '$state', '$ionicLoading', '$ionicPopup', '$log'];
+	LoginCtrl.$inject = ['$state', '$ionicLoading', '$ionicPopup', '$log'];
 	module.exports = exports['default'];
 
 /***/ },
@@ -1094,7 +1101,7 @@
 	exports.default = NewChatCtrl;
 	
 	
-	NewChatCtrl.$inject = ['$scope', '$state', 'NewChat', '$ionicPopup', '$log'];
+	NewChatCtrl.$inject = ['$state', 'NewChat', '$ionicPopup', '$log'];
 	module.exports = exports['default'];
 
 /***/ },
@@ -1163,7 +1170,7 @@
 	exports.default = ProfileCtrl;
 	
 	
-	ProfileCtrl.$inject = ['$scope', '$state', '$ionicPopup', '$log'];
+	ProfileCtrl.$inject = ['$state', '$ionicPopup', '$log'];
 	module.exports = exports['default'];
 
 /***/ },
@@ -1224,7 +1231,7 @@
 	exports.default = SettingsCtrl;
 	
 	
-	SettingsCtrl.$inject = ['$scope', '$state', '$ionicPopup', '$log'];
+	SettingsCtrl.$inject = ['$state', '$ionicPopup', '$log'];
 	module.exports = exports['default'];
 
 /***/ },
