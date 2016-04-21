@@ -1,6 +1,8 @@
 import { Service } from '../entities';
 
 export default class NewChat extends Service {
+  static $inject = ['$rootScope', '$ionicModal']
+
   constructor() {
     super(...arguments);
 
@@ -24,5 +26,3 @@ export default class NewChat extends Service {
     this.modal.remove();
   }
 }
-
-NewChat.$inject = ['$rootScope', '$ionicModal'];

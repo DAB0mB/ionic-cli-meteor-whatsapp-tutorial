@@ -1,6 +1,8 @@
 import { Directive } from '../entities';
 
 export default class input extends Directive {
+  static $inject = ['$timeout']
+
   constructor() {
     super(...arguments);
 
@@ -46,5 +48,3 @@ export default class input extends Directive {
     });
   }
 }
-
-input.$inject = ['$timeout'];

@@ -2,6 +2,8 @@ import { Chats } from 'server/collections';
 import { Controller } from '../entities';
 
 export default class ChatsCtrl extends Controller {
+  static $inject = ['NewChat']
+
   constructor() {
     super(...arguments);
 
@@ -20,5 +22,3 @@ export default class ChatsCtrl extends Controller {
     this.callMethod('removeChat', chat._id);
   }
 }
-
-ChatsCtrl.$inject = ['NewChat'];

@@ -386,8 +386,7 @@
 	  }, {
 	    key: '_defineController',
 	    value: function _defineController(Controller) {
-	      var $inject = Controller.$inject || [];
-	      Controller.$inject = $inject;
+	      var $inject = Controller.$inject;
 	
 	      if ($inject.indexOf('$scope') == -1) {
 	        $inject.unshift('$scope');
@@ -707,10 +706,8 @@
 	  return ChatsCtrl;
 	}(_entities.Controller);
 	
-	exports.default = ChatsCtrl;
-	
-	
 	ChatsCtrl.$inject = ['NewChat'];
+	exports.default = ChatsCtrl;
 	module.exports = exports['default'];
 
 /***/ },
@@ -848,10 +845,8 @@
 	  return ChatCtrl;
 	}(_entities.Controller);
 	
-	exports.default = ChatCtrl;
-	
-	
 	ChatCtrl.$inject = ['$stateParams', '$timeout', '$ionicScrollDelegate', '$ionicPopup', '$log'];
+	exports.default = ChatCtrl;
 	module.exports = exports['default'];
 
 /***/ },
@@ -916,10 +911,8 @@
 	  return ConfirmationCtrl;
 	}(_entities.Controller);
 	
-	exports.default = ConfirmationCtrl;
-	
-	
 	ConfirmationCtrl.$inject = ['$state', '$ionicPopup', '$log'];
+	exports.default = ConfirmationCtrl;
 	module.exports = exports['default'];
 
 /***/ },
@@ -1002,10 +995,8 @@
 	  return LoginCtrl;
 	}(_entities.Controller);
 	
-	exports.default = LoginCtrl;
-	
-	
 	LoginCtrl.$inject = ['$state', '$ionicLoading', '$ionicPopup', '$log'];
+	exports.default = LoginCtrl;
 	module.exports = exports['default'];
 
 /***/ },
@@ -1098,10 +1089,8 @@
 	  return NewChatCtrl;
 	}(_entities.Controller);
 	
-	exports.default = NewChatCtrl;
-	
-	
 	NewChatCtrl.$inject = ['$state', 'NewChat', '$ionicPopup', '$log'];
+	exports.default = NewChatCtrl;
 	module.exports = exports['default'];
 
 /***/ },
@@ -1167,10 +1156,8 @@
 	  return ProfileCtrl;
 	}(_entities.Controller);
 	
-	exports.default = ProfileCtrl;
-	
-	
 	ProfileCtrl.$inject = ['$state', '$ionicPopup', '$log'];
+	exports.default = ProfileCtrl;
 	module.exports = exports['default'];
 
 /***/ },
@@ -1228,10 +1215,8 @@
 	  return SettingsCtrl;
 	}(_entities.Controller);
 	
-	exports.default = SettingsCtrl;
-	
-	
 	SettingsCtrl.$inject = ['$state', '$ionicPopup', '$log'];
+	exports.default = SettingsCtrl;
 	module.exports = exports['default'];
 
 /***/ },
@@ -1313,10 +1298,8 @@
 	  return input;
 	}(_entities.Directive);
 	
-	exports.default = input;
-	
-	
 	input.$inject = ['$timeout'];
+	exports.default = input;
 	module.exports = exports['default'];
 
 /***/ },
@@ -1537,10 +1520,8 @@
 	  return NewChat;
 	}(_entities.Service);
 	
-	exports.default = NewChat;
-	
-	
 	NewChat.$inject = ['$rootScope', '$ionicModal'];
+	exports.default = NewChat;
 	module.exports = exports['default'];
 
 /***/ },
@@ -1644,6 +1625,8 @@
 	  return RoutesConfig;
 	}(_entities.Config);
 	
+	RoutesConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
+	
 	var RoutesRunner = exports.RoutesRunner = function (_Runner) {
 	  _inherits(RoutesRunner, _Runner);
 	
@@ -1675,7 +1658,6 @@
 	  return RoutesRunner;
 	}(_entities.Runner);
 	
-	RoutesConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
 	RoutesRunner.$inject = ['$rootScope', '$state'];
 
 /***/ }

@@ -5,6 +5,8 @@ import { Chats, Messages } from 'server/collections';
 import { Controller } from '../entities';
 
 export default class ChatCtrl extends Controller {
+  static $inject = ['$stateParams', '$timeout', '$ionicScrollDelegate', '$ionicPopup', '$log']
+
   constructor() {
     super(...arguments);
 
@@ -84,5 +86,3 @@ export default class ChatCtrl extends Controller {
     });
   }
 }
-
-ChatCtrl.$inject = ['$stateParams', '$timeout', '$ionicScrollDelegate', '$ionicPopup', '$log'];

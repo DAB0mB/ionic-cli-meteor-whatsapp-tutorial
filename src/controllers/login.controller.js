@@ -3,6 +3,8 @@ import { Accounts } from 'meteor/accounts-base';
 import { Controller } from '../entities';
 
 export default class LoginCtrl extends Controller {
+  static $inject = ['$state', '$ionicLoading', '$ionicPopup', '$log']
+
   login() {
     if (_.isEmpty(this.phone)) return;
 
@@ -41,5 +43,3 @@ export default class LoginCtrl extends Controller {
     });
   }
 }
-
-LoginCtrl.$inject = ['$state', '$ionicLoading', '$ionicPopup', '$log'];

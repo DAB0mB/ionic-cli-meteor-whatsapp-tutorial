@@ -23,7 +23,7 @@ module.exports = {
   target: 'web',
   devtool: 'source-map',
   babel: {
-    presets: ['es2015'],
+    presets: ['es2015', 'stage-0'],
     plugins: ['add-module-exports']
   },
   module: {

@@ -2,6 +2,8 @@ import { Chats } from 'server/collections';
 import { Controller } from '../entities';
 
 export default class NewChatCtrl extends Controller {
+  static $inject = ['$state', 'NewChat', '$ionicPopup', '$log']
+
   constructor() {
     super(...arguments);
 
@@ -47,5 +49,3 @@ export default class NewChatCtrl extends Controller {
     });
   }
 }
-
-NewChatCtrl.$inject = ['$state', 'NewChat', '$ionicPopup', '$log'];

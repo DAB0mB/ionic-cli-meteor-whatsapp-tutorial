@@ -2,6 +2,8 @@ import { _ } from 'meteor/underscore';
 import { Controller } from '../entities';
 
 export default class ProfileCtrl extends Controller {
+  static $inject = ['$state', '$ionicPopup', '$log']
+
   constructor() {
     super(...arguments);
 
@@ -28,5 +30,3 @@ export default class ProfileCtrl extends Controller {
     });
   }
 }
-
-ProfileCtrl.$inject = ['$state', '$ionicPopup', '$log'];

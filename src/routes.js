@@ -2,6 +2,8 @@ import { _ } from 'meteor/underscore';
 import { Config, Runner } from './entities';
 
 export class RoutesConfig extends Config {
+  static $inject = ['$stateProvider', '$urlRouterProvider']
+
   constructor() {
     super(...arguments);
 
@@ -76,6 +78,8 @@ export class RoutesConfig extends Config {
 }
 
 export class RoutesRunner extends Runner {
+  static $inject = ['$rootScope', '$state']
+
   run() {
     this.$rootScope.$on('$stateChangeError', (...args) => {
       const err = _.last(args);
@@ -86,6 +90,3 @@ export class RoutesRunner extends Runner {
     });
   }
 }
-
-RoutesConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
-RoutesRunner.$inject = ['$rootScope', '$state'];

@@ -2,6 +2,8 @@ import { _ } from 'meteor/underscore';
 import { Controller } from '../entities';
 
 export default class ConfirmationCtrl extends Controller {
+  static $inject = ['$state', '$ionicPopup', '$log']
+
   constructor() {
     super(...arguments);
 
@@ -27,5 +29,3 @@ export default class ConfirmationCtrl extends Controller {
     });
   }
 }
-
-ConfirmationCtrl.$inject = ['$state', '$ionicPopup', '$log'];
